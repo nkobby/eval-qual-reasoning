@@ -13,7 +13,6 @@ model = model.to(device)
 
 # %% qa function
 def generate_response(prompt):
-    prompt = "What is the capital of the United Kingdom"
     inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=True).to(device)
     outputs = model.generate(**inputs, max_length=30, pad_token_id=tokenizer.eos_token_id)
     decoded_output = tokenizer.batch_decode(outputs)

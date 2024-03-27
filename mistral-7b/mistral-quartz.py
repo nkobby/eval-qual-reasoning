@@ -5,6 +5,9 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 # %%
 tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-v0.1")
 model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-v0.1")
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
+print("Device: ", device)
+model = model.to(device)
 
 # %% variables for model evaluations
 total_questions = 0
@@ -15,7 +18,7 @@ incorrects = []
 # %% qa function
 def generate_response(prompt):
     prompt = "What is the capital of the United Kingdom"
-    inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
+    inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=True).to(device)
     outputs = model.generate(**inputs, max_length=30, pad_token_id=tokenizer.eos_token_id)
     decoded_output = tokenizer.batch_decode(outputs)
     return decoded_output[0].replace(prompt, "")

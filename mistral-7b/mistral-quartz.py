@@ -1,5 +1,6 @@
 # %%
 import json
+import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 # %%
@@ -9,11 +10,6 @@ device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print("Device: ", device)
 model = model.to(device)
 
-# %% variables for model evaluations
-total_questions = 0
-correct_answers = 0
-limit = 1
-incorrects = []
 
 # %% qa function
 def generate_response(prompt):
@@ -22,11 +18,19 @@ def generate_response(prompt):
     outputs = model.generate(**inputs, max_length=30, pad_token_id=tokenizer.eos_token_id)
     decoded_output = tokenizer.batch_decode(outputs)
     return decoded_output[0].replace(prompt, "")
+    # return '{"Answer": "A", "Explanation":"None"}'
     
 # %%
 def eval_loop():
+    # variables for model evaluations
+    total_questions = 0
+    correct_answers = 0
+    limit = 1
+    incorrects = []
+
     # Read train.jsonl file line by line
-    with open("../data/train.jsonl", "r") as json_file:
+    print("starting eval loop...")
+    with open("./data/train.jsonl", "r") as json_file:
         lines = json_file.readlines()
         
         ctr = 1
@@ -61,6 +65,5 @@ def eval_loop():
                 print("   =0")
             ctr += 1
 
-if __name__ == "main":
-    print("call eval loop)")
-    eval_loop()
+
+eval_loop()

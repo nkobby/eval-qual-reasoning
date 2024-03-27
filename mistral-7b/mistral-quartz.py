@@ -14,7 +14,7 @@ model = model.to(device)
 # %% qa function
 def generate_response(prompt):
     inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=True).to(device)
-    outputs = model.generate(**inputs, max_length=30, pad_token_id=tokenizer.eos_token_id)
+    outputs = model.generate(**inputs, max_length=500, pad_token_id=tokenizer.eos_token_id)
     decoded_output = tokenizer.batch_decode(outputs)
     return decoded_output[0].replace(prompt, "")
     # return '{"Answer": "A", "Explanation":"None"}'
@@ -24,7 +24,7 @@ def eval_loop():
     # variables for model evaluations
     total_questions = 0
     correct_answers = 0
-    limit = 1
+    limit = 10
     incorrects = []
 
     # Read train.jsonl file line by line

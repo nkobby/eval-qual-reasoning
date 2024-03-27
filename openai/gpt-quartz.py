@@ -9,7 +9,7 @@ client = OpenAI(api_key=key)
 #variables for model evaluations
 total_questions = 0
 correct_answers = 0
-limit = 100
+limit = 10
 
 incorrects = []
 # Read train.jsonl file line by line
